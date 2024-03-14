@@ -1,0 +1,94 @@
+{
+  "name": "Barotrauma",
+  "display": "Barotrauma",
+  "type": "barotrauma",
+  "install": [
+    {
+      "commands": [
+        "steamcmd +force_install_dir /pufferpanel +login anonymous +app_update 1026340 +quit"
+      ],
+      "type": "command"
+    },
+    {
+      "target": ".local/share/Daedalic Entertainment GmbH/Barotrauma/",
+      "type": "mkdir"
+    },
+    {
+      "target": ".steam/sdk64",
+      "type": "mkdir"
+    },
+    {
+      "commands": [
+        "cp linux64/steamclient.so .steam/sdk64/steamclient.so"
+      ],
+      "type": "command"
+    },
+    {
+      "target": "serversettings.xml",
+      "text": "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<serversettings\nname=\"${serverName}\"\nport=\"${serverPort}\"\nqueryport=\"${queryPort}\"\npassword=\"${password}\"\n/>",
+      "type": "writefile"
+    }
+  ],
+  "run": {
+    "stopCode": 2,
+    "command": "./DedicatedServer",
+    "workingDirectory": "",
+    "pre": [],
+    "post": [
+      {
+        "commands": [
+          "printf \"\\033[0m\""
+        ],
+        "type": "command"
+      }
+    ],
+    "environmentVars": {}
+  },
+  "data": {
+    "password": {
+      "type": "string",
+      "desc": "Server password",
+      "display": "Password",
+      "value": "",
+      "userEdit": true
+    },
+    "queryPort": {
+      "type": "integer",
+      "desc": "Used for server discovery in the server browser.",
+      "display": "Discovery port",
+      "required": true,
+      "value": "27016",
+      "userEdit": true
+    },
+    "serverName": {
+      "type": "string",
+      "desc": "Name of the Barotrauma server",
+      "display": "Server name",
+      "value": "pufferserver",
+      "userEdit": true
+    },
+    "serverPort": {
+      "type": "integer",
+      "desc": "Server port",
+      "display": "Server port",
+      "required": true,
+      "value": "27015",
+      "userEdit": true
+    }
+  },
+  "supportedEnvironments": [
+    {
+      "bindings": {},
+      "image": "steamcmd/steamcmd",
+      "networkMode": "host",
+      "portBindings": [
+        "0.0.0.0:27015:27015/udp",
+        "0.0.0.0:27016:27016/udp"
+      ],
+      "type": "docker"
+    }
+  ],
+  "requirements": {
+    "arch": "amd64"
+  }
+}
